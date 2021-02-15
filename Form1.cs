@@ -23,6 +23,7 @@ namespace EPC_Encelad_s_Projects_Collection__1
             this.BackColor = Color.White;
             this.ForeColor = Color.Black;
             this.Size = new Size(600, 600);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
         }
     }
 }

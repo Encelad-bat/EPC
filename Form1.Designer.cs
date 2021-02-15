@@ -35,6 +35,8 @@ namespace EPC_Encelad_s_Projects_Collection__1
             this.Text = "Form1";
             this.ResumeLayout(false);
             this.Load += new System.EventHandler(Form1_Load);
+            this.ShowIcon = true;
+            this.ShowInTaskbar = true;
         }
 
         #endregion
