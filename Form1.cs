@@ -20,7 +20,9 @@ namespace EPC_Encelad_s_Projects_Collection__1
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
-
+            this.BackColor = Color.White;
+            this.ForeColor = Color.Black;
+            this.Size = new Size(600, 600);
         }
     }
 }
