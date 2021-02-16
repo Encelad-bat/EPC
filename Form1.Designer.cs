@@ -32,7 +32,7 @@ namespace EPC_Encelad_s_Projects_Collection__1
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.Text = "EPC";
             this.ResumeLayout(false);
             this.Load += new System.EventHandler(Form1_Load);
             this.ShowIcon = true;
