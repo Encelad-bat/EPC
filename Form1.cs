@@ -92,11 +92,55 @@ namespace EPC_Encelad_s_Projects_Collection__1
             Form1_Load(sender, e);
         }
 
+        private void Application_3(object sender, System.EventArgs e)
+        {
+            this.Click += App3_Click;
+            this.MouseMove += App3_MouseMove;
+            this.FormBorderStyle = FormBorderStyle.None;
+        }
+
+        private void App3_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.Text = this.Width + " " + this.Height + " " + MousePosition.ToString();
+        }
+
+        private void App3_Click(object sender, EventArgs e)
+        {
+            if ((e as MouseEventArgs).Button == MouseButtons.Left && ModifierKeys == Keys.Control)
+            {
+                this.Click -= App3_Click;
+                this.MouseMove -= App3_MouseMove;
+                Application_Load_Event = null;
+                buttons.Clear();
+                Form1_Load(sender, e);
+            }
+            else if ((e as MouseEventArgs).Button == MouseButtons.Left)
+            {
+                if (this.PointToClient(MousePosition).X > 10 && this.PointToClient(MousePosition).Y > 10 && this.PointToClient(MousePosition).X < this.Width - 10 && this.PointToClient(MousePosition).Y < this.Height - 10)
+                {
+                    MessageBox.Show("Point in square.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else if (this.PointToClient(MousePosition).X == 10 || this.PointToClient(MousePosition).Y == 10 || this.PointToClient(MousePosition).X == this.Width - 10 || this.PointToClient(MousePosition).Y == this.Height - 10)
+                {
+                    MessageBox.Show("Point on the edge of square.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Point out of square.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else if ((e as MouseEventArgs).Button == MouseButtons.Right)
+            {
+                MessageBox.Show($"Size of Window: {this.Width},{this.Height};\n Cursor position: {MousePosition.X}, {MousePosition.Y}.", "Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            }
+        }
+
         private void Form1_Load(object sender, System.EventArgs e)
         {
             if(Application_Load_Event == null)
             {
                 //====================================================
+                this.Text = "EPC";
                 this.BackColor = Color.White;
                 this.ForeColor = Color.Black;
                 this.Size = new Size(600, 600);
@@ -160,7 +204,8 @@ namespace EPC_Encelad_s_Projects_Collection__1
             }
             else if ((sender as Button).Name == "3")
             {
-
+                Application_Load_Event += Application_3;
+                Form1_Load(sender, e);
             }
             else if ((sender as Button).Name == "4")
             {
