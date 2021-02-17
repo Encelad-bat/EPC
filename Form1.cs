@@ -12,9 +12,17 @@ namespace EPC_Encelad_s_Projects_Collection__1
 {
     public partial class Form1 : Form
     {
+        //====================================================
         private Label title;
         private Label subtitle;
         private List<Button> buttons = new List<Button>();
+        //====================================================
+
+        //====================================================
+        private int start_num = 1;
+        private int end_num = 2000;
+        private int num;
+        //====================================================
 
         public Form1()
         {
@@ -30,6 +38,54 @@ namespace EPC_Encelad_s_Projects_Collection__1
             foreach (var item in summary)
             {
                 MessageBox.Show(item, item.Split(':')[0],MessageBoxButtons.OK,MessageBoxIcon.Information);
+            }
+            Application_Load_Event = null;
+            buttons.Clear();
+            Form1_Load(sender, e);
+        }
+
+        private void Application_2(object sender, System.EventArgs e)
+        {
+            bool is_playing = true;
+            while (is_playing)
+            {
+                System.Threading.Thread.Sleep(12);
+                Random random = new Random();
+                this.num = random.Next(start_num, end_num);
+                DialogResult result = MessageBox.Show($"Your number is {num}?", "Is it your number?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    MessageBox.Show($"So ez.", "I WON!!!");
+                    is_playing = false;
+                }
+                else if (result == DialogResult.No)
+                {
+                    DialogResult bigger_or_smaller = MessageBox.Show("Your number bigger thant my?", "Your number bigger thant my?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (bigger_or_smaller == DialogResult.Yes)
+                    {
+                        if (num < 2000)
+                        {
+                            this.start_num = this.num;
+                        }
+                        else
+                        {
+                            MessageBox.Show("It is lie!");
+                            this.end_num = this.num;
+                        }
+                    }
+                    else if (bigger_or_smaller == DialogResult.No)
+                    {
+                        if (num > 1)
+                        {
+                            this.end_num = this.num;
+                        }
+                        else
+                        {
+                            MessageBox.Show("It is lie!");
+                            this.start_num = this.num;
+                        }
+                    }
+                }
             }
             Application_Load_Event = null;
             buttons.Clear();
@@ -99,7 +155,8 @@ namespace EPC_Encelad_s_Projects_Collection__1
             }
             else if ((sender as Button).Name == "2")
             {
-
+                Application_Load_Event += Application_2;
+                Form1_Load(sender, e);
             }
             else if ((sender as Button).Name == "3")
             {
