@@ -24,26 +24,53 @@ namespace EPC_Encelad_s_Projects_Collection__1
         private int num;
         //====================================================
 
+        //====================================================
+        public List<Form> forms = new List<Form>();
+        public int form_num = 0;
+        Point relativePoint;
+        //====================================================
+
+        //====================================================
+        public Form runningForm;
+        //====================================================
+
         public Form1()
         {
             InitializeComponent();
         }
 
+        //====================================================
+
         private delegate void Application_Load(object sender, System.EventArgs e);
         private event Application_Load Application_Load_Event;
 
+        //====================================================
+
+        //===============================================================X
+        #region Application 1
         private void Application_1(object sender, System.EventArgs e)
         {
             List<string> summary = new List<string>() { "Fullname: Gorbachev Kyrylo Denysovych", "Age: 16", "Programming experience: no experience", "Learning: C#,Python,Ethical hacking", "English level: A2-B1" };
+            double char_quanity = 0;
             foreach (var item in summary)
             {
-                MessageBox.Show(item, item.Split(':')[0],MessageBoxButtons.OK,MessageBoxIcon.Information);
+                char_quanity += item.Length;
+                if(summary.IndexOf(item) != summary.Count - 1)
+                {
+                    MessageBox.Show(item, item.Split(':')[0], MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show(item, (char_quanity / summary.Count).ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             Application_Load_Event = null;
             buttons.Clear();
             Form1_Load(sender, e);
         }
-
+        #endregion
+        //===============================================================X
+        #region Application 2
         private void Application_2(object sender, System.EventArgs e)
         {
             bool is_playing = true;
@@ -91,7 +118,9 @@ namespace EPC_Encelad_s_Projects_Collection__1
             buttons.Clear();
             Form1_Load(sender, e);
         }
-
+        #endregion
+        //===============================================================X
+        #region Application 3
         private void Application_3(object sender, System.EventArgs e)
         {
             this.Click += App3_Click;
@@ -134,7 +163,113 @@ namespace EPC_Encelad_s_Projects_Collection__1
                 MessageBox.Show($"Size of Window: {this.Width},{this.Height};\n Cursor position: {MousePosition.X}, {MousePosition.Y}.", "Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
             }
         }
+        #endregion
+        //===============================================================X
+        #region Application 4
+        struct Coord
+        {
+            public int X_Start;
+            public int Y_Start;
 
+            public int X_End;
+            public int Y_End;
+        }
+        Coord coord = new Coord();
+        private void Application_4(object sender, System.EventArgs e)
+        {
+            this.MouseDown += App4_MouseDown;
+            this.MouseUp += App4_MouseUp;
+        }
+
+        public void App4_MouseDown(object sender, MouseEventArgs argv)
+        {
+            if (argv.Button == MouseButtons.Left)
+            {
+                relativePoint = this.PointToClient(Cursor.Position);
+
+                coord.X_Start = relativePoint.X;
+                coord.Y_Start = relativePoint.Y;
+
+                this.Text = $"X = {coord.X_Start}, Y = {coord.Y_Start}";
+            }
+        }
+
+        public void App4_MouseUp(object sender, MouseEventArgs argv)
+        {
+            if (argv.Button == MouseButtons.Left && ModifierKeys == Keys.Control)
+            {
+                this.MouseClick -= App4_MouseClick;
+                this.MouseDoubleClick -= App4_MouseDoubleClick;
+                this.MouseDown -= App4_MouseDown;
+                Application_Load_Event = null;
+                buttons.Clear();
+                Form1_Load(sender, argv as EventArgs);
+            }
+            else if (argv.Button == MouseButtons.Left)
+            {
+                relativePoint = this.PointToClient(Cursor.Position);
+
+                coord.X_End = relativePoint.X;
+                coord.Y_End = relativePoint.Y;
+
+                this.Text = $"X = {coord.X_End}, Y = {coord.Y_End}";
+
+                if (coord.X_Start > coord.X_End)
+                {
+                    coord.X_End = coord.X_End + coord.X_Start - (coord.X_Start = coord.X_End);
+                }
+
+                if (coord.Y_Start > coord.Y_End)
+                {
+                    coord.Y_End = coord.Y_End + coord.Y_Start - (coord.Y_Start = coord.Y_End);
+                }
+
+                if (coord.X_End - coord.X_Start >= 10 && coord.Y_End - coord.Y_Start >= 10)
+                {
+                    forms.Add(new Form());
+                    forms[form_num].StartPosition = FormStartPosition.Manual;
+                    forms[form_num].BringToFront();
+                    forms[form_num].Location = new Point(coord.X_Start + this.Location.X, coord.Y_Start + this.Location.Y);
+
+                    forms[form_num].Size = new Size(coord.X_End - coord.X_Start, coord.Y_End - coord.Y_Start);
+
+                    forms[form_num].FormBorderStyle = FormBorderStyle.FixedDialog;
+
+                    forms[form_num].Show();
+                    forms[form_num].MouseClick += App4_MouseClick;
+                    forms[form_num].MouseDoubleClick += App4_MouseDoubleClick;
+                    forms[form_num++].Text = form_num.ToString();
+
+                    this.Text = form_num.ToString();
+                }
+                else
+                {
+                    MessageBox.Show("Статик не может быть меньше 10х10 пикселей!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
+
+        public void App4_MouseDoubleClick(object sender, MouseEventArgs argv)
+        {
+            if (argv.Button == MouseButtons.Left)
+            {
+                (sender as Form).Dispose();
+            }
+        }
+
+        public void App4_MouseClick(object sender, MouseEventArgs argv)
+        {
+            if (argv.Button == MouseButtons.Right)
+            {
+                relativePoint = this.PointToClient((sender as Form).Location);
+
+                (sender as Form).Text = $"X = {relativePoint.X}, Y = {relativePoint.Y}, Width = {(sender as Form).Size.Width}, Height = {(sender as Form).Size.Height}";
+            }
+        }
+        #endregion
+        //===============================================================X
+
+        //===============================================================X
         private void Form1_Load(object sender, System.EventArgs e)
         {
             if(Application_Load_Event == null)
@@ -209,7 +344,8 @@ namespace EPC_Encelad_s_Projects_Collection__1
             }
             else if ((sender as Button).Name == "4")
             {
-
+                Application_Load_Event += Application_4;
+                Form1_Load(sender, e);
             }
             else if ((sender as Button).Name == "5")
             {
@@ -228,5 +364,7 @@ namespace EPC_Encelad_s_Projects_Collection__1
 
             }
         }
+
+        //===============================================================X
     }
 }
