@@ -268,7 +268,49 @@ namespace EPC_Encelad_s_Projects_Collection__1
         }
         #endregion
         //===============================================================X
+        #region Application 5
 
+        private void Application_5(object sender, System.EventArgs e)
+        {
+            this.Click += App5_Click;
+            runningForm = new Form();
+            runningForm.Location = new Point(this.Location.X + this.ClientSize.Width / 2, this.Location.Y + this.ClientSize.Height / 2);
+            runningForm.BackColor = Color.MediumVioletRed;
+            runningForm.FormBorderStyle = FormBorderStyle.None;
+            runningForm.ClientSize = new Size(60, 50);
+
+            runningForm.MouseMove += App5_Mouse_Move;
+            runningForm.Show();
+        }
+
+        public void App5_Mouse_Move(object obj, EventArgs argv)
+        {
+            Point relativePoint = runningForm.PointToClient(Cursor.Position);
+            Point windowPoint = this.PointToClient(runningForm.Location);
+            if (relativePoint.X <= runningForm.Width / 2 && windowPoint.X <= this.ClientSize.Width - runningForm.Size.Width)
+                runningForm.Location = new Point(runningForm.Location.X + 1, runningForm.Location.Y);
+            else if (relativePoint.X > runningForm.Width / 2 && windowPoint.X > 0)
+                runningForm.Location = new Point(runningForm.Location.X - 1, runningForm.Location.Y);
+
+            if (relativePoint.Y <= runningForm.Height / 2 && windowPoint.Y <= this.ClientSize.Height - runningForm.Size.Height)
+                runningForm.Location = new Point(runningForm.Location.X, runningForm.Location.Y + 1);
+            else if (relativePoint.Y > runningForm.Height / 2 && windowPoint.Y > 0)
+                runningForm.Location = new Point(runningForm.Location.X, runningForm.Location.Y - 1);
+        }
+
+        private void App5_Click(object sender, EventArgs e)
+        {
+            if ((e as MouseEventArgs).Button == MouseButtons.Left && ModifierKeys == Keys.Control)
+            {
+                this.Click -= App5_Click;
+                runningForm.MouseMove -= App5_Mouse_Move;
+                runningForm.Dispose();
+                Application_Load_Event = null;
+                buttons.Clear();
+                Form1_Load(sender, e);
+            }
+        }
+        #endregion
         //===============================================================X
         private void Form1_Load(object sender, System.EventArgs e)
         {
@@ -349,7 +391,8 @@ namespace EPC_Encelad_s_Projects_Collection__1
             }
             else if ((sender as Button).Name == "5")
             {
-
+                Application_Load_Event += Application_5;
+                Form1_Load(sender, e);
             }
             else if ((sender as Button).Name == "6")
             {
