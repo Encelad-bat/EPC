@@ -34,6 +34,10 @@ namespace EPC_Encelad_s_Projects_Collection__1
         public Form runningForm;
         //====================================================
 
+        //====================================================
+        private TextBox box = new TextBox();
+        //====================================================
+
         public Form1()
         {
             InitializeComponent();
@@ -312,6 +316,84 @@ namespace EPC_Encelad_s_Projects_Collection__1
         }
         #endregion
         //===============================================================X
+        #region Application 6
+        private void Application_6(object sender, System.EventArgs e)
+        {
+            this.box.Multiline = true;
+            this.box.Size = this.Size;
+            this.box.KeyDown += Box_KeyDown;
+            this.Controls.Add(this.box);
+            this.Click += App6_Click;
+        }
+
+        private void Box_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+
+                DateTime dt;
+                if (DateTime.TryParse((sender as TextBox).Text, out dt))
+                {
+                    switch (dt.DayOfWeek)
+                    {
+                        case DayOfWeek.Monday:
+                            {
+                                MessageBox.Show($"День недели - понедельник.");
+                                break;
+                            }
+                        case DayOfWeek.Tuesday:
+                            {
+                                MessageBox.Show($"День недели - вторник.");
+                                break;
+                            }
+                        case DayOfWeek.Wednesday:
+                            {
+                                MessageBox.Show($"День недели - среда.");
+                                break;
+                            }
+                        case DayOfWeek.Thursday:
+                            {
+                                MessageBox.Show($"День недели - четверг.");
+                                break;
+                            }
+                        case DayOfWeek.Friday:
+                            {
+                                MessageBox.Show($"День недели - пятница.");
+                                break;
+                            }
+                        case DayOfWeek.Saturday:
+                            {
+                                MessageBox.Show($"День недели - суббота.");
+                                break;
+                            }
+                        case DayOfWeek.Sunday:
+                            {
+                                MessageBox.Show($"День недели - воскресенье.");
+                                break;
+                            }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"Некорректная дата!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void App6_Click(object sender, EventArgs e)
+        {
+            if ((e as MouseEventArgs).Button == MouseButtons.Left && ModifierKeys == Keys.Control)
+            {
+                this.Click -= App3_Click;
+                this.MouseMove -= App3_MouseMove;
+                Application_Load_Event = null;
+                buttons.Clear();
+                Form1_Load(sender, e);
+            }
+        }
+
+        #endregion
+        //===============================================================X
         private void Form1_Load(object sender, System.EventArgs e)
         {
             if(Application_Load_Event == null)
@@ -396,7 +478,8 @@ namespace EPC_Encelad_s_Projects_Collection__1
             }
             else if ((sender as Button).Name == "6")
             {
-
+                Application_Load_Event += Application_6;
+                Form1_Load(sender, e);
             }
             else if ((sender as Button).Name == "7")
             {
